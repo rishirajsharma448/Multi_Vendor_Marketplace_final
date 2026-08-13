@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Report - Vyapar Setu: Multi-Vendor Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a3c6e;
+      --accent: #2563EB;
+      --accent-light: #dbeafe;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.8;
+      font-size: 14px;
+      counter-reset: figure-counter table-counter;
+    }
+
+    /* ─── Print Styles ─── */
+    @media print {
+      body { font-size: 12pt; line-height: 1.6; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none !important; }
+      .report-container { max-width: 100%; padding: 0; }
+      .cover-page { height: auto; min-height: 100vh; }
+      img { max-width: 100% !important; }
+      .screenshot-img { max-height: 400px !important; }
+    }
+
+    .report-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 30px;
+    }
+
+    /* ─── Cover Page ─── */
+    .cover-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #1a3c6e 100%);
+      color: white;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-page::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cover-page::after {
+      content: '';
+      position: absolute;
+      bottom: -50%;
+      left: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cover-institution {
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .cover-dept {
+      font-size: 15px;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 50px;
+      font-weight: 400;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: rgba(37,99,235,0.3);
+      border: 1px solid rgba(37,99,235,0.5);
+      padding: 6px 24px;
+      border-radius: 30px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #93c5fd;
+    }
+
+    .cover-title {
+      font-family: 'Merriweather', serif;
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-subtitle {
+      font-size: 20px;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 50px;
+      font-weight: 300;
+    }
+
+    .cover-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-meta strong { color: #93c5fd; font-weight: 600; }
+
+    .cover-year {
+      margin-top: 40px;
+      font-size: 16px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    .cover-line {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #2563EB, #60a5fa);
+      margin: 25px auto;
+      border-radius: 2px;
+    }
+
+    /* ─── Section Styles ─── */
+    .section {
+      padding: 50px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section:last-child { border-bottom: none; }
+
+    .section-number {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 14px;
+      margin-right: 12px;
+      vertical-align: middle;
+    }
+
+    .section-title {
+      font-family: 'Merriweather', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 25px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid var(--accent);
+      display: inline-block;
+    }
+
+    .subsection-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 30px 0 15px;
+    }
+
+    h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 20px 0 10px;
+    }
+
+    p {
+      margin-bottom: 14px;
+      text-align: justify;
+    }
+
+    /* ─── Table of Contents ─── */
+    .toc-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .toc-list li {
+      display: flex;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 15px;
+    }
+
+    .toc-list li:last-child { border-bottom: none; }
+
+    .toc-number {
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 45px;
+      font-size: 14px;
+    }
+
+    .toc-text { flex: 1; font-weight: 500; }
+
+    .toc-page {
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 30px;
+      text-align: right;
+    }
+
+    /* ─── Tables ─── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+
+    table th {
+      background: var(--primary);
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    table tr:nth-child(even) { background: var(--bg-alt); }
+
+    /* ─── Diagrams (SVG) ─── */
+    .diagram-container {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 30px;
+      margin: 25px 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .diagram-container svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .diagram-caption {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 12px;
+    }
+
+    /* ─── Screenshots ─── */
+    .screenshot-block {
+      margin: 30px 0;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .screenshot-header {
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .screenshot-header::before {
+      content: '';
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #f87171;
+      box-shadow: 16px 0 0 #fbbf24, 32px 0 0 #4ade80;
+    }
+
+    .screenshot-body {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .screenshot-img {
+      max-width: 100%;
+      max-height: 500px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .screenshot-desc {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ─── Lists ─── */
+    ul, ol {
+      padding-left: 22px;
+      margin: 10px 0 18px;
+    }
+
+    li { margin-bottom: 6px; }
+
+    /* ─── Code Blocks ─── */
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--accent-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    /* ─── Callout Boxes ─── */
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-light);
+      padding: 16px 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+    }
+
+    .callout-success { border-left-color: var(--success); background: #dcfce7; }
+    .callout-warning { border-left-color: var(--warning); background: #fef3c7; }
+
+    /* ─── Advantage/Disadvantage Cards ─── */
+    .adv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .adv-card {
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .adv-card.pro { background: #f0fdf4; border-color: #bbf7d0; }
+    .adv-card.con { background: #fef2f2; border-color: #fecaca; }
+
+    .adv-card h4 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .adv-card.pro h4 { color: var(--success); }
+    .adv-card.con h4 { color: var(--danger); }
+
+    .adv-card li { font-size: 13px; margin-bottom: 6px; }
+
+    /* ─── Navigation Bar ─── */
+    .report-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 30px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    }
+
+    .report-nav-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--primary);
+    }
+
+    .report-nav-actions a {
+      background: var(--accent);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .report-nav-actions a:hover { background: #1d4ed8; }
+
+    .report-body { margin-top: 60px; }
+
+    /* ─── Footer ─── */
+    .report-footer {
+      text-align: center;
+      padding: 30px;
+      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- Navigation Bar (no-print) -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="report-nav no-print">
+  <div class="report-nav-title">📘 Project Report — Vyapar Setu: Multi-Vendor Marketplace</div>
+  <div class="report-nav-actions">
+    <a href="javascript:window.print()">🖨 Print / Save PDF</a>
+  </div>
+</div>
+
+<div class="report-body">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- COVER PAGE -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="cover-page">
+  <div class="cover-institution">G.V. Acharya Institute of Engineering & Technology</div>
+  <div class="cover-dept">Department of Computer Science & Engineering</div>
+
+  <div class="cover-badge">🎓 Final Year Project Report</div>
+
+  <h1 class="cover-title">Vyapar Setu</h1>
+  <div class="cover-subtitle">A Multi-Vendor E-Commerce Marketplace Platform</div>
+
+  <div class="cover-line"></div>
+
+  <div class="cover-meta">
+    <div><strong>Submitted By:</strong> Rishiraj Sharma</div>
+    <div><strong>Roll Number:</strong> 22CS-XXX</div>
+    <div><strong>Guide:</strong> Prof. [Faculty Name]</div>
+    <div><strong>Course:</strong> B.Tech Computer Science & Engineering</div>
+  </div>
+
+  <div class="cover-year">Academic Year 2025 – 2026</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- ABSTRACT -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="report-container">
+  <div class="section page-break" id="abstract">
+    <h2 class="section-title"><span class="section-number">A</span> Abstract</h2>
+    <p>
+      <strong>Vyapar Setu</strong> is a full-featured multi-vendor e-commerce marketplace platform designed to bridge the gap between independent small and medium enterprise (SME) sellers and consumers across India. Built using <strong>PHP</strong>, <strong>MySQL/SQLite</strong>, and <strong>Bootstrap 5</strong>, the platform enables multiple vendors to register, list products, and manage orders through dedicated dashboards, while customers can browse, search, compare, and purchase products from various sellers through a unified storefront.
+    </p>
+    <p>
+      The system implements a three-tier role-based architecture supporting <strong>Customers</strong>, <strong>Vendors</strong>, and <strong>Administrators</strong>, each with dedicated portals and permission-based access control. Key features include dynamic product catalog management, shopping cart with AJAX-based real-time updates, wishlist functionality, a complete order lifecycle with status tracking, product review and rating systems, vendor analytics dashboards, and comprehensive admin governance tools.
+    </p>
+    <p>
+      The platform is built as a server-rendered web application using the LAMP stack (Linux/Windows, Apache, MySQL, PHP) with a responsive front-end powered by Bootstrap 5, Bootstrap Icons, and custom CSS. The database layer supports dual-mode operation with MySQL as the primary database and SQLite as an automatic fallback, ensuring zero-configuration deployment for development and demonstration purposes.
+    </p>
+    <p>
+      <strong>Keywords:</strong> Multi-Vendor Marketplace, E-Commerce, PHP, MySQL, Bootstrap, LAMP Stack, Role-Based Access Control, SME, Online Shopping Platform.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- ACKNOWLEDGMENTS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="acknowledgments">
+    <h2 class="section-title"><span class="section-number">B</span> Acknowledgments</h2>
+    <p>
+      I would like to express my sincere gratitude to all those who helped and guided me throughout the development of this project.
+    </p>
+    <p>
+      First and foremost, I am deeply thankful to my project guide, <strong>Prof. [Faculty Name]</strong>, for providing valuable guidance, constant encouragement, and constructive feedback at every stage of the project. Their expertise in web technologies and software engineering principles was instrumental in shaping this work.
+    </p>
+    <p>
+      I extend my heartfelt thanks to <strong>Dr. [HOD Name]</strong>, Head of the Department of Computer Science & Engineering, for providing the necessary infrastructure, lab facilities, and a supportive academic environment that made this project possible.
+    </p>
+    <p>
+      I am grateful to the <strong>Principal, G.V. Acharya Institute of Engineering & Technology</strong>, for fostering a culture of innovation and practical learning within the institution.
+    </p>
+    <p>
+      I also wish to thank my classmates and friends for their moral support, brainstorming sessions, and technical discussions that contributed significantly to problem-solving during the development phase.
+    </p>
+    <p>
+      Finally, I owe my deepest gratitude to my family for their unwavering support, patience, and encouragement throughout my academic journey.
+    </p>
+    <p style="margin-top: 40px; text-align: right;">
+      <strong>Rishiraj Sharma</strong><br>
+      <em>B.Tech CSE, Academic Year 2025–2026</em>
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TABLE OF CONTENTS / INDEX -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="index">
+    <h2 class="section-title"><span class="section-number">C</span> Table of Contents</h2>
+    <ol class="toc-list">
+      <li><span class="toc-number">A.</span><span class="toc-text">Abstract</span></li>
+      <li><span class="toc-number">B.</span><span class="toc-text">Acknowledgments</span></li>
+      <li><span class="toc-number">C.</span><span class="toc-text">Table of Contents</span></li>
+      <li><span class="toc-number">1.</span><span class="toc-text">Introduction</span></li>
+      <li><span class="toc-number">2.</span><span class="toc-text">System Requirements</span></li>
+      <li><span class="toc-number">3.</span><span class="toc-text">Theoretical Background</span></li>
+      <li><span class="toc-number">4.</span><span class="toc-text">Objectives</span></li>
+      <li><span class="toc-number">5.</span><span class="toc-text">System Flowchart</span></li>
+      <li><span class="toc-number">6.</span><span class="toc-text">ER Diagram (Entity-Relationship)</span></li>
+      <li><span class="toc-number">7.</span><span class="toc-text">Data Flow Diagram (DFD)</span></li>
+      <li><span class="toc-number">8.</span><span class="toc-text">Algorithm</span></li>
+      <li><span class="toc-number">9.</span><span class="toc-text">Screenshots & Walkthrough</span></li>
+      <li><span class="toc-number">10.</span><span class="toc-text">Advantages & Disadvantages</span></li>
+      <li><span class="toc-number">11.</span><span class="toc-text">Analysis</span></li>
+      <li><span class="toc-number">12.</span><span class="toc-text">Conclusion</span></li>
+      <li><span class="toc-number">13.</span><span class="toc-text">References</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 1. INTRODUCTION -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="introduction">
+    <h2 class="section-title"><span class="section-number">1</span> Introduction</h2>
+
+    <h3 class="subsection-title">1.1 Background</h3>
+    <p>
+      The rapid growth of e-commerce in India, projected to reach $200 billion by 2027, has created a significant demand for digital marketplace platforms that empower small and medium enterprises (SMEs) to sell their products online. Traditional single-vendor e-commerce systems limit product variety and place the entire burden of inventory management, logistics, and customer service on a single entity. Multi-vendor marketplace platforms, such as Amazon, Flipkart, and Etsy, solve this problem by enabling multiple independent sellers to list and sell products through a unified storefront.
+    </p>
+    <p>
+      <strong>Vyapar Setu</strong> (meaning "Bridge of Commerce" in Hindi) is a web-based multi-vendor marketplace platform that aims to connect independent artisans, small manufacturers, and verified sellers with consumers. The platform provides dedicated portals for three distinct user roles — Customers, Vendors, and Administrators — enabling a complete e-commerce ecosystem within a single application.
+    </p>
+
+    <h3 class="subsection-title">1.2 Problem Statement</h3>
+    <p>
+      Many Indian SMEs and artisans lack the technical expertise and financial resources to build and maintain their own e-commerce websites. Existing marketplace platforms charge high commission rates (15–30%) and impose strict onboarding requirements that exclude small-scale sellers. There is a need for an affordable, easy-to-deploy marketplace platform that enables sellers to set up digital storefronts quickly, manage their inventory, and process orders — all while providing customers with a seamless shopping experience.
+    </p>
+
+    <h3 class="subsection-title">1.3 Proposed Solution</h3>
+    <p>
+      Vyapar Setu addresses this gap by providing a self-hosted, open-source multi-vendor marketplace platform that can be deployed on any PHP-compatible web server (such as XAMPP, WAMP, or a cloud VPS). The platform features:
+    </p>
+    <ul>
+      <li>Role-based authentication with separate dashboards for Customers, Vendors, and Admins</li>
+      <li>Complete product lifecycle management with categories, images, pricing, and stock control</li>
+      <li>Shopping cart with AJAX-based add/remove operations for seamless user experience</li>
+      <li>Wishlist system for saving favorite products</li>
+      <li>Complete order processing pipeline with status tracking</li>
+      <li>Product review and rating system with vendor response capability</li>
+      <li>Vendor analytics dashboard with revenue, sales, and performance metrics</li>
+      <li>Admin governance panel with user management, vendor approvals, and platform statistics</li>
+      <li>Dual-database support (MySQL primary + SQLite fallback) for zero-configuration deployment</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 2. SYSTEM REQUIREMENTS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="requirements">
+    <h2 class="section-title"><span class="section-number">2</span> System Requirements</h2>
+
+    <h3 class="subsection-title">2.1 Hardware Requirements</h3>
+    <table>
+      <thead>
+        <tr><th>Component</th><th>Minimum Specification</th><th>Recommended</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Processor</td><td>Intel Core i3 / AMD Ryzen 3</td><td>Intel Core i5 / AMD Ryzen 5 or higher</td></tr>
+        <tr><td>RAM</td><td>4 GB</td><td>8 GB or more</td></tr>
+        <tr><td>Storage</td><td>256 GB HDD</td><td>512 GB SSD</td></tr>
+        <tr><td>Display</td><td>1366 × 768 resolution</td><td>1920 × 1080 or higher</td></tr>
+        <tr><td>Network</td><td>Internet connectivity (for CDN assets)</td><td>Broadband connection</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">2.2 Software Requirements</h3>
+    <table>
+      <thead>
+        <tr><th>Software</th><th>Version</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Operating System</td><td>Windows 10/11, Linux, macOS</td><td>Host environment</td></tr>
+        <tr><td>XAMPP / WAMP / LAMP</td><td>8.x+</td><td>Local server stack</td></tr>
+        <tr><td>PHP</td><td>8.0 or higher</td><td>Server-side scripting</td></tr>
+        <tr><td>MySQL / MariaDB</td><td>5.7+ / 10.4+</td><td>Primary relational database</td></tr>
+        <tr><td>SQLite</td><td>3.x (bundled with PHP)</td><td>Fallback database engine</td></tr>
+        <tr><td>Apache HTTP Server</td><td>2.4+</td><td>Web server</td></tr>
+        <tr><td>Web Browser</td><td>Chrome 90+, Firefox 88+, Edge 90+</td><td>Client-side rendering</td></tr>
+        <tr><td>VS Code / Sublime Text</td><td>Latest</td><td>Code editor (development)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">2.3 Technologies & Frameworks Used</h3>
+    <table>
+      <thead>
+        <tr><th>Technology</th><th>Role</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>PHP 8.x</td><td>Backend logic, routing, session management, database operations</td></tr>
+        <tr><td>MySQL / SQLite (PDO)</td><td>Data storage with prepared statements for security</td></tr>
+        <tr><td>HTML5</td><td>Semantic page structure</td></tr>
+        <tr><td>CSS3 + Custom Stylesheet</td><td>Visual theming, responsive layout, animations</td></tr>
+        <tr><td>Bootstrap 5.3</td><td>Responsive grid system, components, utilities</td></tr>
+        <tr><td>Bootstrap Icons</td><td>Iconography throughout the UI</td></tr>
+        <tr><td>JavaScript (Vanilla)</td><td>AJAX cart/wishlist operations, UI interactivity</td></tr>
+        <tr><td>Chart.js</td><td>Analytics charts (vendor & admin dashboards)</td></tr>
+        <tr><td>AOS (Animate on Scroll)</td><td>Scroll-triggered animations on homepage</td></tr>
+        <tr><td>Google Fonts (Poppins)</td><td>Custom typography</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 3. THEORETICAL BACKGROUND -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="theoretical-background">
+    <h2 class="section-title"><span class="section-number">3</span> Theoretical Background</h2>
+
+    <h3 class="subsection-title">3.1 Multi-Vendor Marketplace Model</h3>
+    <p>
+      A multi-vendor marketplace is an e-commerce platform where products are supplied by multiple third-party sellers while the marketplace operator provides the platform infrastructure. Unlike a single-vendor model (where one business owns all inventory), the marketplace model aggregates products from independent sellers, creating a wider product catalog and competitive pricing. The platform earns revenue through commission fees on each transaction.
+    </p>
+    <p>
+      The key stakeholders in such a system include: (a) the <strong>Platform Administrator</strong>, who manages the marketplace infrastructure, approves vendors, and monitors operations; (b) <strong>Vendors/Sellers</strong>, who list products, manage inventory, and fulfill orders; and (c) <strong>Customers/Buyers</strong>, who browse, purchase, and review products.
+    </p>
+
+    <h3 class="subsection-title">3.2 LAMP Stack Architecture</h3>
+    <p>
+      The LAMP stack (Linux, Apache, MySQL, PHP) is one of the most widely used open-source web development platforms. In this project:
+    </p>
+    <ul>
+      <li><strong>Apache</strong> serves as the HTTP web server, handling client requests and routing them to PHP scripts.</li>
+      <li><strong>PHP</strong> processes server-side logic including authentication, database queries, form validation, and page rendering.</li>
+      <li><strong>MySQL/SQLite</strong> stores structured data including user accounts, product catalogs, orders, and reviews via the PDO (PHP Data Objects) abstraction layer.</li>
+    </ul>
+
+    <h3 class="subsection-title">3.3 Role-Based Access Control (RBAC)</h3>
+    <p>
+      RBAC is a security paradigm that restricts system access based on the roles assigned to individual users. In Vyapar Setu, three roles are implemented:
+    </p>
+    <ul>
+      <li><strong>Customer:</strong> Can browse products, manage cart/wishlist, place orders, write reviews, and manage their profile.</li>
+      <li><strong>Vendor:</strong> Can add/edit products, view orders, respond to reviews, manage store settings, and view analytics.</li>
+      <li><strong>Admin:</strong> Can manage all users, approve/reject vendors, manage categories/brands, view platform-wide analytics, and configure settings.</li>
+    </ul>
+
+    <h3 class="subsection-title">3.4 PDO & Prepared Statements</h3>
+    <p>
+      PHP Data Objects (PDO) provides a uniform interface for accessing multiple databases. The project uses PDO with prepared statements (parameterized queries) to prevent SQL injection attacks. This approach separates SQL code from user input, ensuring that malicious input cannot alter the query structure.
+    </p>
+
+    <h3 class="subsection-title">3.5 Session-Based Authentication</h3>
+    <p>
+      The platform uses PHP's native session management for authentication. Upon successful login, a session is created storing the user's ID, name, email, and role. Middleware functions (<code>requireAuth()</code>, <code>requireRole()</code>) verify session data before granting access to protected pages. Session data is destroyed on logout, and session cookies are invalidated.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 4. OBJECTIVES -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="objectives">
+    <h2 class="section-title"><span class="section-number">4</span> Objectives</h2>
+    <p>The primary objectives of the Vyapar Setu project are:</p>
+    <ol>
+      <li><strong>To design and develop a complete multi-vendor e-commerce marketplace</strong> that supports independent product listing, ordering, and fulfillment by multiple sellers through a unified storefront.</li>
+      <li><strong>To implement a robust role-based access control system</strong> with three distinct user roles (Customer, Vendor, Admin), each with dedicated dashboards and appropriate permissions.</li>
+      <li><strong>To build a responsive and visually appealing user interface</strong> using Bootstrap 5 that works seamlessly across desktop, tablet, and mobile devices.</li>
+      <li><strong>To implement secure authentication and authorization mechanisms</strong> using password hashing (bcrypt), session management, and prepared SQL statements to prevent common web vulnerabilities.</li>
+      <li><strong>To create a complete shopping experience</strong> including product browsing with filters, AJAX-powered shopping cart, wishlist, checkout process, and order tracking.</li>
+      <li><strong>To provide comprehensive vendor tools</strong> for product management, order fulfillment, customer review management, store settings, and sales analytics.</li>
+      <li><strong>To develop an administrative governance panel</strong> for platform-wide user management, vendor approval workflows, category/brand management, and financial analytics.</li>
+      <li><strong>To ensure seamless deployment</strong> by implementing dual-database support (MySQL + SQLite fallback) with automatic schema initialization and seed data generation.</li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 5. SYSTEM FLOWCHART -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="flowchart">
+    <h2 class="section-title"><span class="section-number">5</span> System Flowchart</h2>
+    <p>The following flowchart illustrates the complete user journey through the Vyapar Setu platform, from initial access to the order fulfillment cycle.</p>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 1100" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" font-size="11">
+        <!-- Start -->
+        <ellipse cx="400" cy="30" rx="70" ry="22" fill="#2563EB" stroke="#1d4ed8" stroke-width="2"/>
+        <text x="400" y="35" text-anchor="middle" fill="white" font-weight="600">START</text>
+        <line x1="400" y1="52" x2="400" y2="80" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Visit Website -->
+        <rect x="310" y="80" width="180" height="40" rx="6" fill="#f8fafc" stroke="#2563EB" stroke-width="2"/>
+        <text x="400" y="105" text-anchor="middle" font-weight="500">Visit Vyapar Setu</text>
+        <line x1="400" y1="120" x2="400" y2="155" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Decision: Registered? -->
+        <polygon points="400,155 480,195 400,235 320,195" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+        <text x="400" y="198" text-anchor="middle" font-weight="600" font-size="10">Registered?</text>
+
+        <!-- No -> Register -->
+        <line x1="320" y1="195" x2="200" y2="195" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="260" y="188" text-anchor="middle" fill="#dc2626" font-size="10" font-weight="600">No</text>
+        <rect x="110" y="175" width="90" height="40" rx="6" fill="#dbeafe" stroke="#2563EB" stroke-width="1.5"/>
+        <text x="155" y="200" text-anchor="middle" font-size="10" font-weight="500">Register</text>
+        <line x1="155" y1="215" x2="155" y2="250" stroke="#64748b" stroke-width="1.5"/>
+        <line x1="155" y1="250" x2="400" y2="250" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Yes -> Login -->
+        <line x1="400" y1="235" x2="400" y2="270" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="415" y="258" fill="#16a34a" font-size="10" font-weight="600">Yes</text>
+
+        <rect x="320" y="270" width="160" height="40" rx="6" fill="#dbeafe" stroke="#2563EB" stroke-width="2"/>
+        <text x="400" y="295" text-anchor="middle" font-weight="500">Login (Authenticate)</text>
+        <line x1="400" y1="310" x2="400" y2="345" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Decision: Role? -->
+        <polygon points="400,345 490,390 400,435 310,390" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+        <text x="400" y="393" text-anchor="middle" font-weight="600" font-size="10">User Role?</text>
+
+        <!-- Customer Branch -->
+        <line x1="310" y1="390" x2="120" y2="390" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="220" y="383" text-anchor="middle" fill="#2563EB" font-size="10" font-weight="600">Customer</text>
+        <rect x="30" y="370" width="90" height="40" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="75" y="393" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">Customer</text>
+        <text x="75" y="404" text-anchor="middle" font-size="9">Dashboard</text>
+
+        <line x1="75" y1="410" x2="75" y2="445" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="15" y="445" width="120" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="75" y="467" text-anchor="middle" font-size="10">Browse & Search</text>
+
+        <line x1="75" y1="480" x2="75" y2="505" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="15" y="505" width="120" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="75" y="527" text-anchor="middle" font-size="10">Add to Cart/Wishlist</text>
+
+        <line x1="75" y1="540" x2="75" y2="565" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="15" y="565" width="120" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="75" y="587" text-anchor="middle" font-size="10">Checkout & Pay</text>
+
+        <line x1="75" y1="600" x2="75" y2="625" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="15" y="625" width="120" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="75" y="647" text-anchor="middle" font-size="10">Track Order</text>
+
+        <line x1="75" y1="660" x2="75" y2="685" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="15" y="685" width="120" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="75" y="707" text-anchor="middle" font-size="10">Write Review</text>
+
+        <!-- Vendor Branch -->
+        <line x1="400" y1="435" x2="400" y2="470" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="415" y="458" fill="#d97706" font-size="10" font-weight="600">Vendor</text>
+        <rect x="320" y="470" width="160" height="40" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+        <text x="400" y="493" text-anchor="middle" font-size="10" font-weight="600" fill="#92400e">Vendor Dashboard</text>
+
+        <line x1="400" y1="510" x2="400" y2="540" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="320" y="540" width="160" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="400" y="562" text-anchor="middle" font-size="10">Add/Edit Products</text>
+
+        <line x1="400" y1="575" x2="400" y2="600" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="320" y="600" width="160" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="400" y="622" text-anchor="middle" font-size="10">Manage Orders</text>
+
+        <line x1="400" y1="635" x2="400" y2="660" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="320" y="660" width="160" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="400" y="682" text-anchor="middle" font-size="10">View Analytics</text>
+
+        <line x1="400" y1="695" x2="400" y2="720" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="320" y="720" width="160" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="400" y="742" text-anchor="middle" font-size="10">Respond to Reviews</text>
+
+        <!-- Admin Branch -->
+        <line x1="490" y1="390" x2="680" y2="390" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="580" y="383" text-anchor="middle" fill="#dc2626" font-size="10" font-weight="600">Admin</text>
+        <rect x="630" y="370" width="140" height="40" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+        <text x="700" y="393" text-anchor="middle" font-size="10" font-weight="600" fill="#dc2626">Admin Dashboard</text>
+
+        <line x1="700" y1="410" x2="700" y2="445" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="635" y="445" width="130" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="700" y="467" text-anchor="middle" font-size="10">Manage Users</text>
+
+        <line x1="700" y1="480" x2="700" y2="505" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="635" y="505" width="130" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="700" y="527" text-anchor="middle" font-size="10">Approve Vendors</text>
+
+        <line x1="700" y1="540" x2="700" y2="565" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="635" y="565" width="130" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="700" y="587" text-anchor="middle" font-size="10">Manage Categories</text>
+
+        <line x1="700" y1="600" x2="700" y2="625" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="635" y="625" width="130" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="700" y="647" text-anchor="middle" font-size="10">View All Orders</text>
+
+        <line x1="700" y1="660" x2="700" y2="685" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <rect x="635" y="685" width="130" height="35" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+        <text x="700" y="707" text-anchor="middle" font-size="10">Platform Analytics</text>
+
+        <!-- All converge to Logout -->
+        <line x1="75" y1="720" x2="75" y2="800" stroke="#64748b" stroke-width="1.5"/>
+        <line x1="75" y1="800" x2="400" y2="800" stroke="#64748b" stroke-width="1.5"/>
+        <line x1="400" y1="755" x2="400" y2="800" stroke="#64748b" stroke-width="1.5"/>
+        <line x1="700" y1="720" x2="700" y2="800" stroke="#64748b" stroke-width="1.5"/>
+        <line x1="700" y1="800" x2="400" y2="800" stroke="#64748b" stroke-width="1.5"/>
+        <line x1="400" y1="800" x2="400" y2="830" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <rect x="330" y="830" width="140" height="40" rx="6" fill="#dbeafe" stroke="#2563EB" stroke-width="2"/>
+        <text x="400" y="855" text-anchor="middle" font-weight="500">Logout</text>
+        <line x1="400" y1="870" x2="400" y2="910" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- End -->
+        <ellipse cx="400" cy="932" rx="60" ry="22" fill="#dc2626" stroke="#b91c1c" stroke-width="2"/>
+        <text x="400" y="937" text-anchor="middle" fill="white" font-weight="600">END</text>
+
+        <!-- Arrow marker definition -->
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+    <p class="diagram-caption">Figure 5.1 — System Flowchart of Vyapar Setu Multi-Vendor Marketplace</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 6. ER DIAGRAM -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="er-diagram">
+    <h2 class="section-title"><span class="section-number">6</span> ER Diagram</h2>
+    <p>The following Entity-Relationship diagram illustrates the database structure of Vyapar Setu, showing all 16 tables and their relationships.</p>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 850 700" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" font-size="10">
+        <!-- Users Entity -->
+        <rect x="310" y="10" width="170" height="120" rx="8" fill="#dbeafe" stroke="#2563EB" stroke-width="2"/>
+        <rect x="310" y="10" width="170" height="28" rx="8" fill="#2563EB"/>
+        <text x="395" y="29" text-anchor="middle" fill="white" font-weight="700" font-size="11">USERS</text>
+        <text x="320" y="54" font-size="9"><tspan font-weight="600" fill="#dc2626">PK</tspan> id (INT)</text>
+        <text x="320" y="68" font-size="9">name, email, phone</text>
+        <text x="320" y="82" font-size="9">password_hash, role</text>
+        <text x="320" y="96" font-size="9">avatar, status</text>
+        <text x="320" y="110" font-size="9">email_verified</text>
+        <text x="320" y="124" font-size="9">created_at, updated_at</text>
+
+        <!-- Vendors Entity -->
+        <rect x="30" y="180" width="170" height="120" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+        <rect x="30" y="180" width="170" height="28" rx="8" fill="#d97706"/>
+        <text x="115" y="199" text-anchor="middle" fill="white" font-weight="700" font-size="11">VENDORS</text>
+        <text x="40" y="224" font-size="9"><tspan font-weight="600" fill="#dc2626">PK</tspan> id | <tspan font-weight="600" fill="#2563EB">FK</tspan> user_id</text>
+        <text x="40" y="238" font-size="9">vendor_code, store_name</text>
+        <text x="40" y="252" font-size="9">owner_name, email, phone</text>
+        <text x="40" y="266" font-size="9">gstin, category, rating</text>
+        <text x="40" y="280" font-size="9">status, commission_rate</text>
+        <text x="40" y="294" font-size="9">store_logo, banner, address</text>
+
+        <!-- Products Entity -->
+        <rect x="30" y="360" width="170" height="120" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+        <rect x="30" y="360" width="170" height="28" rx="8" fill="#16a34a"/>
+        <text x="115" y="379" text-anchor="middle" fill="white" font-weight="700" font-size="11">PRODUCTS</text>
+        <text x="40" y="404" font-size="9"><tspan font-weight="600" fill="#dc2626">PK</tspan> id | <tspan font-weight="600" fill="#2563EB">FK</tspan> vendor_id, category_id</text>
+        <text x="40" y="418" font-size="9">sku, title, description</text>
+        <text x="40" y="432" font-size="9">price, original_price, discount</text>
+        <text x="40" y="446" font-size="9">stock, spotlight, status</text>
+        <text x="40" y="460" font-size="9">rating, rating_count</text>
+        <text x="40" y="474" font-size="9">brand_id</text>
+
+        <!-- Categories Entity -->
+        <rect x="310" y="180" width="170" height="90" rx="8" fill="#f3e8ff" stroke="#7c3aed" stroke-width="2"/>
+        <rect x="310" y="180" width="170" height="28" rx="8" fill="#7c3aed"/>
+        <text x="395" y="199" text-anchor="middle" fill="white" font-weight="700" font-size="11">CATEGORIES</text>
+        <text x="320" y="224" font-size="9"><tspan font-weight="600" fill="#dc2626">PK</tspan> id</text>
+        <text x="320" y="238" font-size="9">name, slug, icon</text>
+        <text x="320" y="252" font-size="9">parent_id, image, description</text>
+
+        <!-- Orders Entity -->
+        <rect x="560" y="180" width="170" height="130" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+        <rect x="560" y="180" width="170" height="28" rx="8" fill="#dc2626"/>
+        <text x="645" y="199" text-anchor="middle" fill="white" font-weight="700" font-size="11">ORDERS</text>
+        <text x="570" y="224" font-size="9"><tspan font-weight="600" fill="#dc2626">PK</tspan> id | <tspan font-weight="600" fill="#2563EB">FK</tspan> user_id</text>
+        <text x="570" y="238" font-size="9">order_number, customer_name</text>
+        <text x="570" y="252" font-size="9">email, phone, address</text>
+        <text x="570" y="266" font-size="9">payment_method, payment_status</text>
+        <text x="570" y="280" font-size="9">subtotal, discount, tax</text>
+        <text x="570" y="294" font-size="9">shipping_fee, total_amount, status</text>
+
+        <!-- Order Items -->
+        <rect x="560" y="360" width="170" height="90" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+        <rect x="560" y="360" width="170" height="28" rx="8" fill="#ea580c"/>
+        <text x="645" y="379" text-anchor="middle" fill="white" font-weight="700" font-size="11">ORDER_ITEMS</text>
+        <text x="570" y="404" font-size="9"><tspan font-weight="600" fill="#dc2626">PK</tspan> id | <tspan font-weight="600" fill="#2563EB">FK</tspan> order_id</text>
+        <text x="570" y="418" font-size="9">product_id, vendor_id</text>
+        <text x="570" y="432" font-size="9">product_title, price, quantity</text>
+        <text x="570" y="446" font-size="9">status</text>
+
+        <!-- Cart -->
+        <rect x="310" y="340" width="140" height="60" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+        <rect x="310" y="340" width="140" height="24" rx="8" fill="#22c55e"/>
+        <text x="380" y="357" text-anchor="middle" fill="white" font-weight="700" font-size="10">CART</text>
+        <text x="320" y="378" font-size="9"><tspan font-weight="600" fill="#dc2626">PK</tspan> id | <tspan font-weight="600" fill="#2563EB">FK</tspan> user_id</text>
+        <text x="320" y="392" font-size="9">session_id</text>
+
+        <!-- Cart Items -->
+        <rect x="310" y="420" width="140" height="55" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+        <rect x="310" y="420" width="140" height="24" rx="8" fill="#22c55e"/>
+        <text x="380" y="437" text-anchor="middle" fill="white" font-weight="700" font-size="10">CART_ITEMS</text>
+        <text x="320" y="456" font-size="9"><tspan font-weight="600" fill="#2563EB">FK</tspan> cart_id, product_id</text>
+        <text x="320" y="470" font-size="9">quantity, price</text>
+
+        <!-- Wishlist -->
+        <rect x="310" y="500" width="140" height="50" rx="8" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.5"/>
+        <rect x="310" y="500" width="140" height="24" rx="8" fill="#ec4899"/>
+        <text x="380" y="517" text-anchor="middle" fill="white" font-weight="700" font-size="10">WISHLIST</text>
+        <text x="320" y="536" font-size="9"><tspan font-weight="600" fill="#2563EB">FK</tspan> user_id, product_id</text>
+
+        <!-- Reviews -->
+        <rect x="30" y="530" width="170" height="70" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+        <rect x="30" y="530" width="170" height="24" rx="8" fill="#059669"/>
+        <text x="115" y="547" text-anchor="middle" fill="white" font-weight="700" font-size="10">REVIEWS</text>
+        <text x="40" y="568" font-size="9"><tspan font-weight="600" fill="#2563EB">FK</tspan> product_id, user_id</text>
+        <text x="40" y="582" font-size="9">customer_name, rating, comment</text>
+        <text x="40" y="596" font-size="9">vendor_response</text>
+
+        <!-- Payments -->
+        <rect x="560" y="480" width="170" height="65" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+        <rect x="560" y="480" width="170" height="24" rx="8" fill="#3b82f6"/>
+        <text x="645" y="497" text-anchor="middle" fill="white" font-weight="700" font-size="10">PAYMENTS</text>
+        <text x="570" y="518" font-size="9"><tspan font-weight="600" fill="#2563EB">FK</tspan> order_id</text>
+        <text x="570" y="532" font-size="9">transaction_id, amount, status</text>
+
+        <!-- Notifications -->
+        <rect x="560" y="570" width="170" height="55" rx="8" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+        <rect x="560" y="570" width="170" height="24" rx="8" fill="#ca8a04"/>
+        <text x="645" y="587" text-anchor="middle" fill="white" font-weight="700" font-size="10">NOTIFICATIONS</text>
+        <text x="570" y="608" font-size="9"><tspan font-weight="600" fill="#2563EB">FK</tspan> user_id | title, message</text>
+        <text x="570" y="622" font-size="9">is_read, type, link</text>
+
+        <!-- Activity Logs -->
+        <rect x="560" y="645" width="170" height="45" rx="8" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+        <rect x="560" y="645" width="170" height="24" rx="8" fill="#64748b"/>
+        <text x="645" y="662" text-anchor="middle" fill="white" font-weight="700" font-size="10">ACTIVITY_LOGS</text>
+        <text x="570" y="682" font-size="9">user_id, action, ip_address</text>
+
+        <!-- Relationship Lines -->
+        <!-- Users -> Vendors (1:1) -->
+        <line x1="310" y1="100" x2="200" y2="180" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="240" y="145" font-size="8" fill="#64748b" font-weight="600">1:1</text>
+
+        <!-- Users -> Orders (1:N) -->
+        <line x1="480" y1="100" x2="645" y2="180" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="570" y="145" font-size="8" fill="#64748b" font-weight="600">1:N</text>
+
+        <!-- Users -> Cart -->
+        <line x1="395" y1="130" x2="380" y2="340" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Users -> Wishlist -->
+        <line x1="395" y1="130" x2="380" y2="500" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Vendors -> Products (1:N) -->
+        <line x1="115" y1="300" x2="115" y2="360" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="130" y="335" font-size="8" fill="#64748b" font-weight="600">1:N</text>
+
+        <!-- Categories -> Products -->
+        <line x1="310" y1="250" x2="200" y2="370" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="240" y="310" font-size="8" fill="#64748b" font-weight="600">1:N</text>
+
+        <!-- Orders -> Order Items (1:N) -->
+        <line x1="645" y1="310" x2="645" y2="360" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="660" y="340" font-size="8" fill="#64748b" font-weight="600">1:N</text>
+
+        <!-- Orders -> Payments (1:N) -->
+        <line x1="645" y1="310" x2="645" y2="480" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Products -> Reviews (1:N) -->
+        <line x1="115" y1="480" x2="115" y2="530" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="130" y="510" font-size="8" fill="#64748b" font-weight="600">1:N</text>
+
+        <!-- Users -> Notifications -->
+        <line x1="480" y1="80" x2="645" y2="570" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="3,3"/>
+      </svg>
+    </div>
+    <p class="diagram-caption">Figure 6.1 — Entity-Relationship Diagram of Vyapar Setu Database (16 Tables)</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 7. DATA FLOW DIAGRAM -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="dfd">
+    <h2 class="section-title"><span class="section-number">7</span> Data Flow Diagram</h2>
+    <p>The Data Flow Diagram (DFD) shows how data moves between external entities, processes, and data stores within the Vyapar Setu system.</p>
+
+    <h3 class="subsection-title">7.1 Context Diagram (Level 0 DFD)</h3>
+    <div class="diagram-container">
+      <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" font-size="11">
+        <!-- Customer Entity -->
+        <rect x="20" y="40" width="130" height="50" rx="0" fill="none" stroke="#2563EB" stroke-width="2"/>
+        <text x="85" y="70" text-anchor="middle" font-weight="700" fill="#2563EB">Customer</text>
+
+        <!-- Vendor Entity -->
+        <rect x="20" y="220" width="130" height="50" rx="0" fill="none" stroke="#d97706" stroke-width="2"/>
+        <text x="85" y="250" text-anchor="middle" font-weight="700" fill="#d97706">Vendor</text>
+
+        <!-- Admin Entity -->
+        <rect x="550" y="130" width="130" height="50" rx="0" fill="none" stroke="#dc2626" stroke-width="2"/>
+        <text x="615" y="160" text-anchor="middle" font-weight="700" fill="#dc2626">Admin</text>
+
+        <!-- Central Process -->
+        <circle cx="350" cy="155" r="80" fill="#dbeafe" stroke="#2563EB" stroke-width="2"/>
+        <text x="350" y="145" text-anchor="middle" font-weight="700" font-size="12" fill="#1e3a5f">Vyapar Setu</text>
+        <text x="350" y="162" text-anchor="middle" font-size="10" fill="#1e3a5f">Multi-Vendor</text>
+        <text x="350" y="177" text-anchor="middle" font-size="10" fill="#1e3a5f">Marketplace</text>
+
+        <!-- Customer -> System -->
+        <line x1="150" y1="55" x2="275" y2="120" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+        <text x="190" y="75" font-size="9" fill="#2563EB">Orders, Reviews,</text>
+        <text x="190" y="87" font-size="9" fill="#2563EB">Cart Data, Registration</text>
+
+        <!-- System -> Customer -->
+        <line x1="275" y1="140" x2="150" y2="75" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+        <text x="170" y="125" font-size="9" fill="#16a34a">Products, Order Status,</text>
+        <text x="170" y="137" font-size="9" fill="#16a34a">Notifications</text>
+
+        <!-- Vendor -> System -->
+        <line x1="150" y1="235" x2="275" y2="185" stroke="#d97706" stroke-width="1.5" marker-end="url(#arrowOrange)"/>
+        <text x="175" y="222" font-size="9" fill="#d97706">Products, Stock Updates,</text>
+        <text x="175" y="234" font-size="9" fill="#d97706">Order Fulfillment</text>
+
+        <!-- System -> Vendor -->
+        <line x1="275" y1="195" x2="150" y2="250" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+        <text x="175" y="262" font-size="9" fill="#16a34a">Orders, Analytics,</text>
+        <text x="175" y="274" font-size="9" fill="#16a34a">Revenue Reports</text>
+
+        <!-- Admin -> System -->
+        <line x1="550" y1="148" x2="430" y2="140" stroke="#dc2626" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+        <text x="470" y="128" font-size="9" fill="#dc2626">Vendor Approvals,</text>
+        <text x="470" y="140" font-size="9" fill="#dc2626">Category Mgmt</text>
+
+        <!-- System -> Admin -->
+        <line x1="430" y1="165" x2="550" y2="165" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+        <text x="470" y="183" font-size="9" fill="#16a34a">Platform Stats,</text>
+        <text x="470" y="195" font-size="9" fill="#16a34a">User Reports</text>
+
+        <defs>
+          <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2563EB"/></marker>
+          <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#16a34a"/></marker>
+          <marker id="arrowOrange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#d97706"/></marker>
+          <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#dc2626"/></marker>
+        </defs>
+      </svg>
+    </div>
+    <p class="diagram-caption">Figure 7.1 — Context Diagram (Level 0 DFD) of Vyapar Setu</p>
+
+    <h3 class="subsection-title">7.2 Level 1 DFD — Key Processes</h3>
+    <table>
+      <thead><tr><th>Process</th><th>Input</th><th>Output</th><th>Data Store</th></tr></thead>
+      <tbody>
+        <tr><td>1.0 User Authentication</td><td>Email, Password</td><td>Session Token, Role Redirect</td><td>D1: Users</td></tr>
+        <tr><td>2.0 Product Catalog</td><td>Category Filters, Search Query</td><td>Product Listings, Details</td><td>D2: Products, D3: Categories</td></tr>
+        <tr><td>3.0 Cart Management</td><td>Product ID, Quantity</td><td>Cart Summary, Updated Count</td><td>D4: Cart, D5: Cart Items</td></tr>
+        <tr><td>4.0 Order Processing</td><td>Cart Items, Address, Payment</td><td>Order Confirmation, Order Number</td><td>D6: Orders, D7: Order Items</td></tr>
+        <tr><td>5.0 Product Management</td><td>Product Details, Images</td><td>Published Listing</td><td>D2: Products, D8: Product Images</td></tr>
+        <tr><td>6.0 Review System</td><td>Rating, Comment</td><td>Published Review</td><td>D9: Reviews</td></tr>
+        <tr><td>7.0 Admin Governance</td><td>Approval Decision, Settings</td><td>Status Updates, Reports</td><td>D1: Users, D10: Vendors</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 8. ALGORITHM -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="algorithm">
+    <h2 class="section-title"><span class="section-number">8</span> Algorithm</h2>
+
+    <h3 class="subsection-title">8.1 User Authentication Algorithm</h3>
+    <div class="code-block">Algorithm: USER_LOGIN(email, password)
+──────────────────────────────────────────
+1.  INPUT: email, password from login form
+2.  VALIDATE email format and non-empty password
+3.  IF validation fails THEN
+4.      DISPLAY error message
+5.      RETURN to login page
+6.  ENDIF
+7.  QUERY user record from Users table WHERE email = input_email
+8.  IF no user found THEN
+9.      DISPLAY "Invalid email or password"
+10.     RETURN
+11. ENDIF
+12. VERIFY password against stored password_hash using bcrypt
+13. IF password does NOT match THEN
+14.     DISPLAY "Invalid email or password"
+15.     RETURN
+16. ENDIF
+17. IF user.status ≠ 'ACTIVE' THEN
+18.     DISPLAY "Account suspended/inactive"
+19.     RETURN
+20. ENDIF
+21. CREATE session with user_id, name, email, role
+22. LOG activity: "User logged in" with IP address
+23. REDIRECT based on role:
+24.     IF role = 'admin'    → Admin Dashboard
+25.     IF role = 'vendor'   → Vendor Dashboard
+26.     IF role = 'customer' → Customer Dashboard
+27. END</div>
+
+    <h3 class="subsection-title">8.2 Add to Cart Algorithm</h3>
+    <div class="code-block">Algorithm: ADD_TO_CART(product_id, quantity, user_id)
+──────────────────────────────────────────
+1.  INPUT: product_id, quantity (default=1), user_id from session
+2.  IF user is NOT logged in THEN
+3.      RETURN redirect to login page
+4.  ENDIF
+5.  FETCH product price and stock from Products table
+6.  IF product NOT found OR stock = 0 THEN
+7.      RETURN error "Product unavailable"
+8.  ENDIF
+9.  FIND cart for user_id in Cart table
+10. IF no cart exists THEN
+11.     CREATE new cart record for user_id
+12.     SET cart_id = newly created ID
+13. ELSE
+14.     SET cart_id = existing cart ID
+15. ENDIF
+16. CHECK if product already exists in Cart_Items for this cart_id
+17. IF item exists THEN
+18.     UPDATE quantity = existing_quantity + new_quantity
+19.     UPDATE price = current_product_price
+20. ELSE
+21.     INSERT new Cart_Item (cart_id, product_id, quantity, price)
+22. ENDIF
+23. CALCULATE new cart count
+24. RETURN success with updated cart_count (JSON response)
+25. END</div>
+
+    <h3 class="subsection-title">8.3 Order Placement Algorithm</h3>
+    <div class="code-block">Algorithm: PLACE_ORDER(user_id, address, payment_method)
+──────────────────────────────────────────
+1.  INPUT: shipping details, payment method, user_id
+2.  FETCH all cart items for user_id with product details
+3.  IF cart is empty THEN
+4.      REDIRECT to cart page with warning
+5.  ENDIF
+6.  CALCULATE subtotal = SUM(price × quantity for each item)
+7.  CALCULATE shipping = ₹99.00 (if subtotal > 0)
+8.  CALCULATE total = subtotal + shipping
+9.  GENERATE unique order_number = "ORD-" + random(10000, 99999)
+10. BEGIN database transaction
+11. TRY:
+12.     INSERT order into Orders table
+13.     FOR each cart_item DO:
+14.         INSERT into Order_Items (order_id, vendor_id, product details)
+15.         UPDATE product stock = MAX(0, stock - quantity)
+16.     ENDFOR
+17.     DELETE all cart_items for this user
+18.     COMMIT transaction
+19.     DISPLAY success: "Order placed successfully"
+20.     REDIRECT to order confirmation page
+21. CATCH exception:
+22.     ROLLBACK transaction
+23.     DISPLAY error message
+24. END</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 9. SCREENSHOTS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="screenshots">
+    <h2 class="section-title"><span class="section-number">9</span> Screenshots & Walkthrough</h2>
+    <p>The following screenshots demonstrate the key features and pages of the Vyapar Setu platform.</p>
+
+    <!-- 9.1 Homepage -->
+    <h3 class="subsection-title">9.1 Homepage — Hero Banner & Navigation</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Homepage — Vyapar Setu Marketplace</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/homepage_hero_1786027775121.png" alt="Vyapar Setu Homepage Hero Section" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.1 — The homepage features a gradient hero banner, global search bar, category browsing, and featured product listings.</p>
+      </div>
+    </div>
+
+    <!-- 9.2 Homepage Products -->
+    <h3 class="subsection-title">9.2 Homepage — Featured Products & Categories</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Homepage — Trending Products Section</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/homepage_products_1786027791046.png" alt="Vyapar Setu Featured Products" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.2 — Product cards display pricing, vendor name, ratings, wishlist button, and add-to-cart functionality.</p>
+      </div>
+    </div>
+
+    <!-- 9.3 Shop/Marketplace -->
+    <h3 class="subsection-title">9.3 Shop Marketplace — Product Catalog with Filters</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Shop Marketplace — Storefront with Sidebar Filters</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/shop_page_1786027831752.png" alt="Vyapar Setu Shop Page" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.3 — The shop page provides category filters, spotlight badges (Bestseller/Featured), and sort options (newest, price, rating).</p>
+      </div>
+    </div>
+
+    <!-- 9.4 Product Detail -->
+    <h3 class="subsection-title">9.4 Product Detail Page</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Product Detail — SonicPods Pro Earbuds</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/product_detail_1786027932910.png" alt="Product Detail Page" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.4 — Full product view with image gallery, pricing with discount, stock status, quantity selector, vendor info, and customer reviews section.</p>
+      </div>
+    </div>
+
+    <!-- 9.5 Login -->
+    <h3 class="subsection-title">9.5 User Login Page</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Sign In — Authentication Portal</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/login_page_1786027863522.png" alt="Login Page" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.5 — Unified login page for Customers, Vendors, and Admins with role-based redirect after authentication.</p>
+      </div>
+    </div>
+
+    <!-- 9.6 Registration -->
+    <h3 class="subsection-title">9.6 Registration Page</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Account Registration — Customer/Vendor Toggle</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/register_page_1786027895495.png" alt="Registration Page" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.6 — Registration form with toggle between Customer and Vendor modes; vendor registration includes additional fields for store name, category, and GSTIN.</p>
+      </div>
+    </div>
+
+    <!-- 9.7 Customer Dashboard -->
+    <h3 class="subsection-title">9.7 Customer Dashboard</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Customer Dashboard — Rishiraj Sharma</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/customer_dashboard_1786028045135.png" alt="Customer Dashboard" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.7 — Customer portal showing order metrics (Total Orders, Wishlist Items, Cart Items), quick action buttons, and recent orders table with status badges.</p>
+      </div>
+    </div>
+
+    <!-- 9.8 Shopping Cart -->
+    <h3 class="subsection-title">9.8 Shopping Cart</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Shopping Cart — Order Summary</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/cart_page_1786028067020.png" alt="Shopping Cart Page" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.8 — Cart page with product details, quantity controls, vendor attribution, subtotal/shipping calculation, and checkout button.</p>
+      </div>
+    </div>
+
+    <!-- 9.9 Vendor Dashboard -->
+    <h3 class="subsection-title">9.9 Vendor Dashboard</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Vendor Dashboard — TechCraft Electronics</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/vendor_dashboard_1786028132409.png" alt="Vendor Dashboard" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.9 — Vendor portal showing store metrics (Active Products, Orders, Revenue), earnings analytics with Chart.js graphs, and top-performing products.</p>
+      </div>
+    </div>
+
+    <!-- 9.10 Admin Dashboard -->
+    <h3 class="subsection-title">9.10 Admin Governance Dashboard</h3>
+    <div class="screenshot-block">
+      <div class="screenshot-header">Admin Dashboard — Platform Governance</div>
+      <div class="screenshot-body">
+        <img src="report-screenshots/admin_dashboard_1786028190010.png" alt="Admin Dashboard" class="screenshot-img">
+        <p class="screenshot-desc">Figure 9.10 — Admin governance panel showing platform-wide statistics (Users, Vendors, Products, Orders, GMV), vendor approval queue, revenue trends, and user role distribution charts.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 10. ADVANTAGES & DISADVANTAGES -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="advantages-disadvantages">
+    <h2 class="section-title"><span class="section-number">10</span> Advantages & Disadvantages</h2>
+
+    <div class="adv-grid">
+      <div class="adv-card pro">
+        <h4>✅ Advantages</h4>
+        <ul>
+          <li><strong>Multi-Vendor Support:</strong> Multiple sellers can operate independently through a single platform, expanding product variety for customers.</li>
+          <li><strong>Role-Based Access Control:</strong> Three distinct user roles with dedicated dashboards ensure data isolation and proper authorization.</li>
+          <li><strong>Zero-Configuration Deployment:</strong> SQLite fallback eliminates the need for MySQL setup during development and demonstrations.</li>
+          <li><strong>Responsive Design:</strong> Bootstrap 5 ensures the platform works across desktops, tablets, and mobile devices.</li>
+          <li><strong>Secure Architecture:</strong> Prepared statements prevent SQL injection; bcrypt hashing protects passwords; session-based auth controls access.</li>
+          <li><strong>AJAX-Powered Interactions:</strong> Cart and wishlist operations work without page reloads, improving user experience.</li>
+          <li><strong>Low Commission Model:</strong> 10% default commission rate enables affordable entry for small vendors compared to major marketplaces.</li>
+          <li><strong>Complete Analytics:</strong> Both vendor and admin dashboards include revenue charts, sales metrics, and performance indicators.</li>
+          <li><strong>Self-Hosted:</strong> Platform can be deployed on any PHP-compatible server, giving full data ownership and control.</li>
+          <li><strong>Open Source Stack:</strong> Built entirely with free, open-source technologies (PHP, MySQL, Bootstrap, Chart.js).</li>
+        </ul>
+      </div>
+
+      <div class="adv-card con">
+        <h4>❌ Disadvantages</h4>
+        <ul>
+          <li><strong>No Payment Gateway Integration:</strong> The platform lacks integration with real payment processors (Razorpay, Stripe, PayPal).</li>
+          <li><strong>Limited Search:</strong> Product search is basic text-matching without full-text search indexing or AI-powered recommendations.</li>
+          <li><strong>No Real-Time Notifications:</strong> Notifications are database-driven without WebSocket or push notification support.</li>
+          <li><strong>Single-Server Architecture:</strong> Not designed for horizontal scaling; may face performance issues under very high concurrent load.</li>
+          <li><strong>No Email Verification:</strong> Email verification is flagged in the database but actual email sending (SMTP) is not implemented.</li>
+          <li><strong>No Multi-Language Support:</strong> The platform is English-only; no i18n/l10n framework is integrated.</li>
+          <li><strong>No Image CDN:</strong> Product images use external URLs or local storage without CDN optimization for fast delivery.</li>
+          <li><strong>Limited Reporting:</strong> Financial reports and tax calculations are simplified; no GST invoice generation.</li>
+          <li><strong>No Mobile App:</strong> Only a web-based interface; no native Android/iOS companion applications.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 11. ANALYSIS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="analysis">
+    <h2 class="section-title"><span class="section-number">11</span> Analysis</h2>
+
+    <h3 class="subsection-title">11.1 System Architecture Analysis</h3>
+    <p>
+      Vyapar Setu follows a <strong>monolithic server-rendered architecture</strong> where all business logic, database operations, authentication, and HTML rendering happen within PHP scripts on the server. This approach provides simplicity of deployment and maintenance — the entire application can be deployed by copying files to a web server directory — but limits scalability compared to microservice or API-first architectures.
+    </p>
+
+    <h3 class="subsection-title">11.2 Database Design Analysis</h3>
+    <p>
+      The database schema consists of <strong>16 well-normalized tables</strong> covering the complete e-commerce domain. Key design decisions include:
+    </p>
+    <ul>
+      <li><strong>Separation of Users and Vendors:</strong> Vendor-specific data (store_name, GSTIN, commission_rate) is stored in a separate table linked via <code>user_id</code>, following the principle of data normalization.</li>
+      <li><strong>Cart as a persistent entity:</strong> The two-table cart design (cart + cart_items) allows future support for guest carts via session_id and logged-in carts via user_id.</li>
+      <li><strong>Denormalized order items:</strong> Order items store product_title and price at the time of purchase, ensuring historical accuracy even if the product is later modified or deleted.</li>
+      <li><strong>Dual-database compatibility:</strong> The PDO abstraction layer with SQLite fallback enables zero-configuration deployment, making the platform ideal for academic demonstrations.</li>
+    </ul>
+
+    <h3 class="subsection-title">11.3 Security Analysis</h3>
+    <table>
+      <thead><tr><th>Vulnerability</th><th>Mitigation</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>SQL Injection</td><td>PDO prepared statements with parameterized queries</td><td style="color:#16a34a;font-weight:600;">✅ Protected</td></tr>
+        <tr><td>Cross-Site Scripting (XSS)</td><td><code>htmlspecialchars()</code> via <code>sanitize()</code> on all output</td><td style="color:#16a34a;font-weight:600;">✅ Protected</td></tr>
+        <tr><td>Password Storage</td><td>bcrypt hashing via <code>password_hash()</code></td><td style="color:#16a34a;font-weight:600;">✅ Protected</td></tr>
+        <tr><td>Session Hijacking</td><td>Session regeneration on login (recommended enhancement)</td><td style="color:#d97706;font-weight:600;">⚠️ Partial</td></tr>
+        <tr><td>CSRF Protection</td><td>Not implemented (recommended enhancement)</td><td style="color:#dc2626;font-weight:600;">❌ Missing</td></tr>
+        <tr><td>File Upload Validation</td><td>MIME type checking, size limits, extension validation</td><td style="color:#16a34a;font-weight:600;">✅ Protected</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">11.4 Performance Considerations</h3>
+    <p>
+      The platform performs efficiently for small to medium-scale deployments (up to ~10,000 products, ~1,000 concurrent users). For larger scale, the following optimizations would be recommended:
+    </p>
+    <ul>
+      <li>Database indexing on frequently queried columns (category_id, vendor_id, status)</li>
+      <li>Pagination for product listings (currently loads all matching products)</li>
+      <li>Redis/Memcached caching for session storage and frequently accessed data</li>
+      <li>CDN integration for static assets and product images</li>
+      <li>Database connection pooling for high-concurrency environments</li>
+    </ul>
+
+    <h3 class="subsection-title">11.5 Comparison with Existing Platforms</h3>
+    <table>
+      <thead><tr><th>Feature</th><th>Vyapar Setu</th><th>Amazon / Flipkart</th><th>WooCommerce</th></tr></thead>
+      <tbody>
+        <tr><td>Multi-Vendor</td><td>✅ Built-in</td><td>✅ Built-in</td><td>⚠️ Plugin required</td></tr>
+        <tr><td>Self-Hosted</td><td>✅ Full control</td><td>❌ SaaS-only</td><td>✅ WordPress-based</td></tr>
+        <tr><td>Commission Rate</td><td>10% (configurable)</td><td>15-30%</td><td>0% (self-hosted)</td></tr>
+        <tr><td>Setup Complexity</td><td>Low (XAMPP copy)</td><td>N/A (managed)</td><td>Medium (WordPress)</td></tr>
+        <tr><td>Vendor Dashboard</td><td>✅ Full analytics</td><td>✅ Seller Central</td><td>⚠️ Plugin dependent</td></tr>
+        <tr><td>Payment Gateway</td><td>❌ Simulated</td><td>✅ Integrated</td><td>✅ Multiple plugins</td></tr>
+        <tr><td>Technology</td><td>PHP + Bootstrap</td><td>Proprietary</td><td>PHP + WordPress</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 12. CONCLUSION -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="conclusion">
+    <h2 class="section-title"><span class="section-number">12</span> Conclusion</h2>
+    <p>
+      The Vyapar Setu multi-vendor marketplace platform has been successfully designed, developed, and tested as a comprehensive e-commerce solution that addresses the need for an affordable, self-hosted marketplace platform for Indian SMEs and independent artisans. The project demonstrates the practical application of core web development concepts including server-side programming with PHP, relational database design with MySQL/SQLite, responsive front-end development with Bootstrap 5, and AJAX-based interactive user interfaces.
+    </p>
+    <p>
+      The platform achieves all eight of its stated objectives: implementing a three-tier role-based access control system, building a complete product-to-order lifecycle, providing vendor self-service tools with analytics, and enabling administrative governance capabilities. The dual-database architecture (MySQL + SQLite fallback) ensures that the platform can be deployed and demonstrated without any external database configuration, making it particularly suitable for academic evaluation and rapid prototyping.
+    </p>
+    <p>
+      Key accomplishments include:
+    </p>
+    <ul>
+      <li>A 16-table normalized database schema covering the complete e-commerce domain</li>
+      <li>Three dedicated dashboards with role-specific features and metrics</li>
+      <li>AJAX-powered cart and wishlist operations for seamless user experience</li>
+      <li>Secure authentication with bcrypt password hashing and session management</li>
+      <li>Vendor analytics with Chart.js-powered revenue and performance visualizations</li>
+      <li>Complete order lifecycle from placement to tracking with status management</li>
+    </ul>
+
+    <h3 class="subsection-title">12.1 Future Scope</h3>
+    <p>
+      The Vyapar Setu platform can be enhanced in the following ways:
+    </p>
+    <ol>
+      <li><strong>Payment Gateway Integration:</strong> Integrate Razorpay, Stripe, or PayPal for real payment processing with UPI, cards, and net banking support.</li>
+      <li><strong>AI-Powered Recommendations:</strong> Implement collaborative filtering or content-based recommendation algorithms to suggest products based on browsing history.</li>
+      <li><strong>Real-Time Notifications:</strong> Add WebSocket or Server-Sent Events (SSE) for instant order updates and chat functionality.</li>
+      <li><strong>Mobile Application:</strong> Develop React Native or Flutter companion apps for Android and iOS platforms.</li>
+      <li><strong>Multi-Language Support:</strong> Implement i18n framework for Hindi, Tamil, Bengali, and other regional language support.</li>
+      <li><strong>GST Invoice Generation:</strong> Automated GST-compliant invoice generation for vendors and customers.</li>
+      <li><strong>Logistics Integration:</strong> API integration with courier services (Shiprocket, Delhivery) for real-time tracking.</li>
+      <li><strong>CSRF Token Protection:</strong> Add anti-CSRF tokens to all forms for enhanced security.</li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 13. REFERENCES -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section page-break" id="references">
+    <h2 class="section-title"><span class="section-number">13</span> References</h2>
+
+    <ol style="font-size: 13px; line-height: 2;">
+      <li>PHP Official Documentation. <em>PHP: Hypertext Preprocessor</em>. Available at: <a href="https://www.php.net/docs.php">https://www.php.net/docs.php</a></li>
+      <li>MySQL Reference Manual. <em>MySQL 8.0 Documentation</em>. Available at: <a href="https://dev.mysql.com/doc/">https://dev.mysql.com/doc/</a></li>
+      <li>Bootstrap. <em>Bootstrap 5 Documentation</em>. Available at: <a href="https://getbootstrap.com/docs/5.3/">https://getbootstrap.com/docs/5.3/</a></li>
+      <li>Chart.js. <em>Chart.js Documentation</em>. Available at: <a href="https://www.chartjs.org/docs/">https://www.chartjs.org/docs/</a></li>
+      <li>OWASP Foundation. <em>OWASP Top Ten Web Application Security Risks</em>. Available at: <a href="https://owasp.org/www-project-top-ten/">https://owasp.org/www-project-top-ten/</a></li>
+      <li>SQLite Consortium. <em>SQLite Documentation</em>. Available at: <a href="https://www.sqlite.org/docs.html">https://www.sqlite.org/docs.html</a></li>
+      <li>MDN Web Docs. <em>JavaScript & Web APIs Reference</em>. Available at: <a href="https://developer.mozilla.org/en-US/">https://developer.mozilla.org/en-US/</a></li>
+      <li>W3Schools. <em>PHP, MySQL, HTML, CSS, JavaScript Tutorials</em>. Available at: <a href="https://www.w3schools.com/">https://www.w3schools.com/</a></li>
+      <li>Laudon, K.C. and Traver, C.G. (2021). <em>E-Commerce 2021: Business, Technology, Society</em>. 16th Edition. Pearson Education.</li>
+      <li>Welling, L. and Thomson, L. (2017). <em>PHP and MySQL Web Development</em>. 5th Edition. Addison-Wesley Professional.</li>
+      <li>Nixon, R. (2021). <em>Learning PHP, MySQL & JavaScript</em>. 6th Edition. O'Reilly Media.</li>
+      <li>India Brand Equity Foundation (IBEF). <em>Indian E-Commerce Industry Report 2025</em>. Available at: <a href="https://www.ibef.org/industry/ecommerce-presentation">https://www.ibef.org/industry/ecommerce-presentation</a></li>
+    </ol>
+  </div>
+
+</div><!-- end .report-container -->
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="report-footer">
+  <p><strong>Vyapar Setu — Multi-Vendor E-Commerce Marketplace Platform</strong></p>
+  <p>© 2025–2026 | G.V. Acharya Institute of Engineering & Technology | Department of Computer Science & Engineering</p>
+  <p style="margin-top: 8px;">Built with PHP 8.x · MySQL/SQLite · Bootstrap 5 · Chart.js · JavaScript</p>
+</div>
+
+</div><!-- end .report-body -->
+
+</body>
+</html>

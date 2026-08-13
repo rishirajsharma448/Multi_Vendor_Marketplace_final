@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vyapar Setu - Multi-Vendor Marketplace Platform</title>
+  <meta name="description" content="Vyapar Setu is a comprehensive full-stack e-commerce marketplace connecting SME vendors with customers across India. Browse products, manage storefronts, and track orders.">
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Role Switcher Bar -->
+  <div class="role-switcher-bar">
+    <div class="container role-switcher-content">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-weight: 700; color: #FFF; font-size: 0.8rem;"><i class="fa-solid fa-user-gear text-primary"></i> Active Persona:</span>
+        <div class="role-pills">
+          <button class="role-pill active" data-role="customer" onclick="switchRole('customer')">
+            <i class="fa-solid fa-shopping-bag"></i> Customer View
+          </button>
+          <button class="role-pill" data-role="vendor" onclick="switchRole('vendor')">
+            <i class="fa-solid fa-store"></i> Vendor Console (TechCraft)
+          </button>
+          <button class="role-pill" data-role="admin" onclick="switchRole('admin')">
+            <i class="fa-solid fa-shield-halved"></i> Admin Governance
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <span class="role-badge-tag" id="role-badge-text">Mode: Customer Storefront</span>
+        <button onclick="resetSystemData()" style="color: #94A3B8; font-size: 0.75rem; font-weight: 600; text-decoration: underline;">
+          <i class="fa-solid fa-rotate-left"></i> Reset Demo Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="main-header">
+    <div class="container header-inner">
+      <div class="brand-logo" onclick="switchRole('customer')">
+        <img src="assets/images/logo.jpg" alt="Vyapar Setu Logo" style="height: 55px; border-radius: var(--radius-sm); object-fit: contain;">
+      </div>
+
+      <!-- Live Search Bar -->
+      <div class="header-search">
+        <div class="search-input-group">
+          <i class="fa-solid fa-magnifying-glass" style="color: #94A3B8;"></i>
+          <input type="text" id="global-search-input" placeholder="Search 5,000+ products across verified vendors..." oninput="handleSearchInput(this.value)">
+          <button class="search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="header-actions">
+        <button class="action-icon-btn" title="Track Order" onclick="openOrderTracker()">
+          <i class="fa-solid fa-truck-fast"></i>
+        </button>
+
+        <button class="action-icon-btn" title="Wishlist" onclick="toggleWishlistModal()">
+          <i class="fa-regular fa-heart"></i>
+          <span class="badge-count" id="wishlist-count">0</span>
+        </button>
+
+        <button class="action-icon-btn" title="Shopping Basket" onclick="openCartDrawer()">
+          <i class="fa-solid fa-basket-shopping"></i>
+          <span class="badge-count" id="cart-count">0</span>
+        </button>
+
+        <button class="btn-primary" onclick="openVendorRegistrationModal()">
+          <i class="fa-solid fa-store"></i> Register Store
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Secondary Category Navigation -->
+  <nav class="cat-nav-bar" id="cat-nav-bar">
+    <div class="container">
+      <ul class="cat-nav-list" id="category-pills-list">
+        <!-- Rendered dynamically via JS -->
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main View Router Container -->
+  <main class="main-content container">
+
+    <!-- ========================================== -->
+    <!-- 1. CUSTOMER STOREFRONT VIEW               -->
+    <!-- ========================================== -->
+    <div id="view-customer" class="view-section">
+      <!-- Hero Showcase Banner -->
+      <section class="hero-banner">
+        <div class="hero-grid">
+          <div>
+            <span class="hero-pill-badge"><i class="fa-solid fa-certificate"></i> Verified SME Marketplace</span>
+            <h2 class="hero-title">Empowering Local Vendors, <span>Delivering Quality</span> Nationwide</h2>
+            <p class="hero-desc">Discover thousands of handcrafted, electronic, and organic products directly from certified Indian enterprise sellers with full buyer protection and fast delivery.</p>
+            <div class="hero-cta-group">
+              <button class="btn-primary" onclick="scrollToProducts()"><i class="fa-solid fa-compass"></i> Explore Storefront</button>
+              <button class="btn-secondary" style="background: rgba(255,255,255,0.15); color: #FFF; border-color: rgba(255,255,255,0.25);" onclick="openVendorRegistrationModal()">Sell on Vyapar Setu</button>
+            </div>
+          </div>
+
+          <!-- Featured Vendors Spotlight Cards -->
+          <div class="vendor-showcase-cards">
+            <h4 style="color: #FFEDD5; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Featured Storefronts</h4>
+            
+            <div class="vendor-mini-card">
+              <div class="vendor-info">
+                <div class="vendor-avatar">TE</div>
+                <div>
+                  <div class="vendor-name">TechCraft Electronics</div>
+                  <div class="vendor-tag">Smart Devices & Accessories</div>
+                </div>
+              </div>
+              <div class="vendor-rating-badge"><i class="fa-solid fa-star"></i> 4.9 (1.2k)</div>
+            </div>
+
+            <div class="vendor-mini-card">
+              <div class="vendor-info">
+                <div class="vendor-avatar" style="background: #10B981;">BT</div>
+                <div>
+                  <div class="vendor-name">Bharat Handloom Textiles</div>
+                  <div class="vendor-tag">Handwoven Apparel & Fabrics</div>
+                </div>
+              </div>
+              <div class="vendor-rating-badge"><i class="fa-solid fa-star"></i> 4.8 (850)</div>
+            </div>
+
+            <div class="vendor-mini-card">
+              <div class="vendor-info">
+                <div class="vendor-avatar" style="background: #8B5CF6;">SS</div>
+                <div>
+                  <div class="vendor-name">Swadeshi Organic Spices</div>
+                  <div class="vendor-tag">Pure Spices & Farm Foods</div>
+                </div>
+              </div>
+              <div class="vendor-rating-badge"><i class="fa-solid fa-star"></i> 4.9 (2.4k)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Storefront Content Layout (Filters + Grid) -->
+      <div class="storefront-layout" id="products-section">
+        <!-- Sidebar Filters -->
+        <aside class="filter-card">
+          <div class="filter-title">
+            <span><i class="fa-solid fa-filter text-primary"></i> Filter Products</span>
+            <button onclick="resetFilters()" style="font-size: 0.75rem; color: var(--primary-600); font-weight: 700;">Reset</button>
+          </div>
+
+          <!-- Category Filter -->
+          <div class="filter-group">
+            <label class="filter-label">Categories</label>
+            <ul class="filter-list" id="sidebar-category-list">
+              <!-- Rendered JS -->
+            </ul>
+          </div>
+
+          <!-- Price Range Filter -->
+          <div class="filter-group">
+            <label class="filter-label">Price Range (₹)</label>
+            <div class="price-slider-wrap">
+              <input type="range" id="price-range-slider" min="0" max="50000" step="500" value="50000" oninput="updatePriceFilter(this.value)">
+              <div class="price-values">
+                <span>₹0</span>
+                <span id="price-max-display" style="font-weight: 700; color: var(--navy-900);">₹50,000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Minimum Rating Filter -->
+          <div class="filter-group">
+            <label class="filter-label">Minimum Rating</label>
+            <div class="filter-list">
+              <label class="filter-item-label">
+                <span><i class="fa-solid fa-star" style="color:#F59E0B;"></i> 4.5 & above</span>
+                <input type="radio" name="rating-filter" value="4.5" onchange="filterProducts()">
+              </label>
+              <label class="filter-item-label">
+                <span><i class="fa-solid fa-star" style="color:#F59E0B;"></i> 4.0 & above</span>
+                <input type="radio" name="rating-filter" value="4.0" onchange="filterProducts()">
+              </label>
+              <label class="filter-item-label">
+                <span>All Ratings</span>
+                <input type="radio" name="rating-filter" value="0" checked onchange="filterProducts()">
+              </label>
+            </div>
+          </div>
+
+          <!-- Vendor Filter -->
+          <div class="filter-group">
+            <label class="filter-label">SME Vendor</label>
+            <select id="vendor-filter-select" class="sort-select" style="width: 100%;" onchange="filterProducts()">
+              <option value="ALL">All Stores</option>
+              <!-- JS Populated -->
+            </select>
+          </div>
+        </aside>
+
+        <!-- Main Products Display Area -->
+        <div>
+          <!-- Top Toolbar -->
+          <div class="products-top-toolbar">
+            <div class="results-count" id="results-count-text">Showing 8 of 8 products</div>
+
+            <div class="sort-group">
+              <span style="font-size: 0.85rem; font-weight: 600; color: var(--navy-700);"><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By:</span>
+              <select id="sort-select" class="sort-select" onchange="filterProducts()">
+                <option value="spotlight">Best Selling Spotlight</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Customer Rating</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Products Grid -->
+          <div class="products-grid" id="products-grid-container">
+            <!-- Dynamically populated via app.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. VENDOR DASHBOARD CONSOLE VIEW           -->
+    <!-- ========================================== -->
+    <div id="view-vendor" class="view-section" style="display: none;">
+      <!-- Vendor Header Banner -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; align-items: center; gap: 1.25rem;">
+          <div class="vendor-avatar" style="width: 60px; height: 60px; font-size: 1.5rem;">TE</div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <h2 style="font-size: 1.5rem;">TechCraft Electronics</h2>
+              <span class="status-pill status-approved"><i class="fa-solid fa-circle-check"></i> Verified SME Store</span>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem;">
+              Store ID: <code>VND-88219</code> &nbsp;|&nbsp; Commission Tier: <strong>10% Platform Fee</strong> &nbsp;|&nbsp; Seller Score: <strong>4.9 / 5.0</strong>
+            </p>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="openAddProductModal()"><i class="fa-solid fa-plus"></i> Add New Product</button>
+      </div>
+
+      <!-- Dashboard Layout -->
+      <div class="dashboard-layout">
+        <!-- Sidebar Menu -->
+        <aside class="dash-sidebar">
+          <ul class="dash-menu">
+            <li class="dash-menu-item active" onclick="switchVendorTab('overview')"><i class="fa-solid fa-chart-line"></i> Store Overview</li>
+            <li class="dash-menu-item" onclick="switchVendorTab('products')"><i class="fa-solid fa-box-archive"></i> Product Listings</li>
+            <li class="dash-menu-item" onclick="switchVendorTab('orders')"><i class="fa-solid fa-receipt"></i> Customer Orders</li>
+            <li class="dash-menu-item" onclick="switchVendorTab('reviews')"><i class="fa-solid fa-star"></i> Buyer Feedback</li>
+          </ul>
+        </aside>
+
+        <!-- Main Dashboard Tab Content -->
+        <div>
+          <!-- Tab 1: Overview & Analytics -->
+          <div id="vendor-tab-overview">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-icon orange"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                <div>
+                  <div class="stat-val" id="vendor-stat-revenue">₹1,48,900</div>
+                  <div class="stat-label">Total Store Revenue</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon blue"><i class="fa-solid fa-cart-flatbed"></i></div>
+                <div>
+                  <div class="stat-val" id="vendor-stat-orders">18</div>
+                  <div class="stat-label">Orders Received</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon emerald"><i class="fa-solid fa-boxes-stacked"></i></div>
+                <div>
+                  <div class="stat-val" id="vendor-stat-products">4</div>
+                  <div class="stat-label">Active Products</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon purple"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div>
+                  <div class="stat-val" style="color: var(--accent-rose);">1</div>
+                  <div class="stat-label">Low Stock Warning</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h3><i class="fa-solid fa-chart-area text-primary"></i> Monthly Sales & Revenue Metric</h3>
+                  <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">FY 2025-2026</span>
+                </div>
+                <div class="chart-canvas-wrap flex-center">
+                  <svg width="100%" height="200" viewBox="0 0 500 200" style="overflow: visible;">
+                    <!-- Grid Lines -->
+                    <line x1="40" y1="160" x2="480" y2="160" stroke="#E2E8F0" stroke-width="1"/>
+                    <line x1="40" y1="110" x2="480" y2="110" stroke="#E2E8F0" stroke-dasharray="4" stroke-width="1"/>
+                    <line x1="40" y1="60" x2="480" y2="60" stroke="#E2E8F0" stroke-dasharray="4" stroke-width="1"/>
+                    
+                    <!-- Line Gradient -->
+                    <defs>
+                      <linearGradient id="salesGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#F97316" stop-opacity="0.4"/>
+                        <stop offset="100%" stop-color="#F97316" stop-opacity="0.0"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M 50 140 Q 120 120 190 90 T 330 50 T 470 30 L 470 160 L 50 160 Z" fill="url(#salesGrad)"/>
+                    <path d="M 50 140 Q 120 120 190 90 T 330 50 T 470 30" fill="none" stroke="#F97316" stroke-width="3.5" stroke-linecap="round"/>
+                    
+                    <!-- Points -->
+                    <circle cx="50" cy="140" r="5" fill="#F97316"/>
+                    <circle cx="190" cy="90" r="5" fill="#F97316"/>
+                    <circle cx="330" cy="50" r="5" fill="#F97316"/>
+                    <circle cx="470" cy="30" r="5" fill="#F97316"/>
+                    
+                    <!-- Labels -->
+                    <text x="50" y="180" font-size="11" fill="#64748B" text-anchor="middle">Apr</text>
+                    <text x="190" y="180" font-size="11" fill="#64748B" text-anchor="middle">May</text>
+                    <text x="330" y="180" font-size="11" fill="#64748B" text-anchor="middle">Jun</text>
+                    <text x="470" y="180" font-size="11" fill="#64748B" text-anchor="middle">Jul</text>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h3><i class="fa-solid fa-chart-pie text-primary"></i> Regional Distribution</h3>
+                </div>
+                <div class="chart-canvas-wrap flex-center flex-direction-column">
+                  <svg width="140" height="140" viewBox="0 0 36 36">
+                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#E2E8F0" stroke-width="3.8"/>
+                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F97316" stroke-width="3.8" stroke-dasharray="55, 100"/>
+                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#6366F1" stroke-width="3.8" stroke-dasharray="30, 100" stroke-dashoffset="-55"/>
+                  </svg>
+                  <div style="font-size: 0.78rem; display: flex; gap: 0.75rem; margin-top: 1rem;">
+                    <span><i class="fa-solid fa-circle" style="color: #F97316;"></i> West (55%)</span>
+                    <span><i class="fa-solid fa-circle" style="color: #6366F1;"></i> North (30%)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Products Management -->
+          <div id="vendor-tab-products" style="display: none;" class="data-table-card">
+            <div class="flex-between" style="margin-bottom: 1rem;">
+              <h3>My Product Inventory</h3>
+              <button class="btn-primary" onclick="openAddProductModal()"><i class="fa-solid fa-plus"></i> Add Item</button>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="vendor-products-tbody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 3: Orders Fulfillment -->
+          <div id="vendor-tab-orders" style="display: none;" class="data-table-card">
+            <h3>Incoming Sales Orders</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Fulfill customer orders and update shipment status in real time.</p>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Items Purchased</th>
+                    <th>Total Price</th>
+                    <th>Current Status</th>
+                    <th>Fulfillment Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="vendor-orders-tbody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 4: Reviews & Feedback -->
+          <div id="vendor-tab-reviews" style="display: none;" class="data-table-card">
+            <h3>Post-Purchase Buyer Feedback</h3>
+            <div id="vendor-reviews-container" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. ADMIN GOVERNANCE PORTAL VIEW            -->
+    <!-- ========================================== -->
+    <div id="view-admin" class="view-section" style="display: none;">
+      <!-- Admin Header Banner -->
+      <div style="background: linear-gradient(135deg, var(--navy-900), var(--navy-800)); color: #FFF; border-radius: var(--radius-lg); padding: 1.75rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-md);">
+        <div>
+          <h2 style="color: #FFF; font-size: 1.6rem;"><i class="fa-solid fa-shield-halved text-primary"></i> Platform Admin Governance Panel</h2>
+          <p style="color: #94A3B8; font-size: 0.9rem; margin-top: 0.25rem;">Supervise multi-vendor store approvals, commission billing, product moderation, and audit compliance.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); padding: 0.75rem 1.25rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.15); text-align: right;">
+          <div style="font-size: 0.75rem; color: #CBD5E1; font-weight: 700; text-transform: uppercase;">Platform Commission Pool (10%)</div>
+          <div style="font-size: 1.5rem; font-weight: 800; color: #F59E0B;" id="admin-commission-pool">₹24,850</div>
+        </div>
+      </div>
+
+      <!-- Admin Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-chart-gantt"></i></div>
+          <div>
+            <div class="stat-val" id="admin-total-gmv">₹2,48,500</div>
+            <div class="stat-label">Total Marketplace GMV</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon emerald"><i class="fa-solid fa-building-circle-check"></i></div>
+          <div>
+            <div class="stat-val" id="admin-active-vendors">3 Active</div>
+            <div class="stat-label">Verified SME Vendors</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fa-solid fa-hourglass-half"></i></div>
+          <div>
+            <div class="stat-val" style="color: var(--primary-600);" id="admin-pending-vendors">1 Pending</div>
+            <div class="stat-label">Vendor Onboarding Requests</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-solid fa-receipt"></i></div>
+          <div>
+            <div class="stat-val" id="admin-total-orders">24</div>
+            <div class="stat-label">Total Platform Orders</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Navigation Tabs -->
+      <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+        <button class="btn-primary" id="admin-btn-vendors" onclick="switchAdminTab('vendors')"><i class="fa-solid fa-store"></i> Vendor Onboarding Approvals</button>
+        <button class="btn-secondary" id="admin-btn-products" onclick="switchAdminTab('products')"><i class="fa-solid fa-boxes-packing"></i> Product Moderation</button>
+        <button class="btn-secondary" id="admin-btn-audit" onclick="switchAdminTab('audit')"><i class="fa-solid fa-list-check"></i> System Audit Logs</button>
+      </div>
+
+      <!-- Admin Tab 1: Vendor Approvals -->
+      <div id="admin-tab-vendors" class="data-table-card">
+        <h3>SME Vendor Onboarding Requests</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Validate GSTIN & business documents before granting storefront authorization.</p>
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Store Name</th>
+                <th>Owner Name</th>
+                <th>Category Specialty</th>
+                <th>GSTIN Document</th>
+                <th>Application Date</th>
+                <th>Status</th>
+                <th>Governance Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-vendors-tbody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Admin Tab 2: Product Moderation -->
+      <div id="admin-tab-products" style="display: none;" class="data-table-card">
+        <h3>Platform Product Listings Moderation</h3>
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Product Title</th>
+                <th>SME Vendor</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Visibility Status</th>
+                <th>Moderation Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-tbody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Admin Tab 3: Audit Logs -->
+      <div id="admin-tab-audit" style="display: none;" class="data-table-card">
+        <h3>Real-time Activity Audit Logs</h3>
+        <ul id="admin-audit-logs" style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; font-family: monospace; font-size: 0.85rem;">
+          <!-- Populated via JS -->
+        </ul>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- FLOATING COMPARE BAR                       -->
+  <!-- ========================================== -->
+  <div class="compare-float-bar" id="compare-float-bar">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <i class="fa-solid fa-scale-balanced text-primary" style="font-size: 1.2rem;"></i>
+      <div>
+        <div style="font-weight: 700; font-size: 0.9rem;">Product Compare Tray</div>
+        <div style="font-size: 0.75rem; color: #CBD5E1;" id="compare-count-text">0 of 4 items selected</div>
+      </div>
+    </div>
+
+    <div class="compare-items-thumbs" id="compare-thumbs-container"></div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <button class="btn-primary" style="padding: 0.45rem 1rem; font-size: 0.82rem;" onclick="openCompareModal()">Compare Specs Now</button>
+      <button onclick="clearCompareTray()" style="color: #94A3B8; font-size: 0.75rem; font-weight: 600;"><i class="fa-solid fa-xmark"></i> Clear</button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODALS SYSTEM                              -->
+  <!-- ========================================== -->
+
+  <!-- 1. Product Details Modal -->
+  <div class="modal-overlay" id="modal-product-detail">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeModal('modal-product-detail')"><i class="fa-solid fa-xmark"></i></button>
+      <div id="product-detail-content">
+        <!-- Rendered JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Side-by-Side Comparison Modal -->
+  <div class="modal-overlay" id="modal-compare">
+    <div class="modal-card" style="max-width: 950px;">
+      <button class="modal-close-btn" onclick="closeModal('modal-compare')"><i class="fa-solid fa-xmark"></i></button>
+      <div class="flex-between">
+        <h2><i class="fa-solid fa-scale-balanced text-primary"></i> Side-by-Side Specifications Comparison</h2>
+        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Unified Comparison Grid</span>
+      </div>
+
+      <div class="compare-matrix-grid" id="compare-matrix-content">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Shopping Cart Drawer / Modal -->
+  <div class="modal-overlay" id="modal-cart">
+    <div class="modal-card" style="max-width: 600px;">
+      <button class="modal-close-btn" onclick="closeModal('modal-cart')"><i class="fa-solid fa-xmark"></i></button>
+      <h2><i class="fa-solid fa-basket-shopping text-primary"></i> My Shopping Cart</h2>
+      
+      <div id="cart-items-list" style="margin: 1.5rem 0; display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Populated JS -->
+      </div>
+
+      <div style="border-top: 1px solid var(--border-light); padding-top: 1rem;">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+          <input type="text" id="coupon-code-input" placeholder="Promo Coupon Code (e.g. VYAPAR10)" style="flex: 1; padding: 0.5rem; border: 1px solid var(--border-light); border-radius: var(--radius-md); font-weight: 600; text-transform: uppercase;">
+          <button class="btn-secondary" onclick="applyCouponCode()">Apply</button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem; margin-bottom: 1.25rem;">
+          <div class="flex-between"><span>Subtotal:</span><span id="cart-subtotal-display" style="font-weight: 700;">₹0</span></div>
+          <div class="flex-between" style="color: var(--accent-emerald);"><span>Coupon Discount:</span><span id="cart-discount-display" style="font-weight: 700;">-₹0</span></div>
+          <div class="flex-between"><span>Estimated Delivery Charge:</span><span style="font-weight: 700; color: var(--accent-emerald);">FREE</span></div>
+          <div class="flex-between" style="font-size: 1.2rem; font-weight: 800; color: var(--navy-900); border-top: 1.5px solid var(--navy-900); padding-top: 0.5rem;">
+            <span>Grand Total:</span><span id="cart-total-display">₹0</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;" onclick="openCheckoutModal()">Proceed to Safe Checkout <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Checkout Modal -->
+  <div class="modal-overlay" id="modal-checkout">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeModal('modal-checkout')"><i class="fa-solid fa-xmark"></i></button>
+      <h2><i class="fa-solid fa-shield-check text-primary"></i> Multi-Step Secure Checkout</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Verified address validation & instant automated invoice generation.</p>
+
+      <form id="checkout-form" onsubmit="handlePlaceOrder(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Full Customer Name</label>
+            <input type="text" required value="Rishiraj Sharma" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+          </div>
+
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Phone Number</label>
+            <input type="tel" required value="+91 98765 43210" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Shipping Address</label>
+          <textarea required rows="2" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">Flat 402, G.V. Acharya Campus Road, Shelu, Maharashtra - 410101</textarea>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.5rem;">Payment Gateway Option</label>
+          <div style="display: flex; gap: 1rem;">
+            <label style="flex: 1; border: 1.5px solid var(--primary-500); background: var(--primary-50); padding: 0.75rem; border-radius: var(--radius-md); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="radio" name="payment-method" checked> <span><i class="fa-solid fa-qrcode text-primary"></i> UPI / Razorpay Instant</span>
+            </label>
+            <label style="flex: 1; border: 1px solid var(--border-light); padding: 0.75rem; border-radius: var(--radius-md); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="radio" name="payment-method"> <span><i class="fa-solid fa-money-bill-transfer"></i> Cash on Delivery</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.9rem;">Confirm Order & Generate Invoice <i class="fa-solid fa-file-invoice"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. Automated PDF Invoice Modal -->
+  <div class="modal-overlay" id="modal-invoice">
+    <div class="modal-card printable-invoice-container" style="max-width: 700px;">
+      <button class="modal-close-btn" onclick="closeModal('modal-invoice')"><i class="fa-solid fa-xmark"></i></button>
+      <div id="invoice-render-box">
+        <!-- Rendered JS -->
+      </div>
+      <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+        <button class="btn-secondary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Save PDF Invoice</button>
+        <button class="btn-primary" onclick="closeModal('modal-invoice'); openOrderTracker();"><i class="fa-solid fa-location-dot"></i> Track Shipment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Visual Order Tracker Modal View -->
+  <div class="modal-overlay" id="modal-order-tracker">
+    <div class="modal-card" style="max-width: 750px;">
+      <button class="modal-close-btn" onclick="closeModal('modal-order-tracker')"><i class="fa-solid fa-xmark"></i></button>
+      <h2><i class="fa-solid fa-truck-fast text-primary"></i> Real-time Order Shipment Tracker</h2>
+      
+      <div id="tracker-order-selector" style="margin-top: 1rem;">
+        <!-- Rendered JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Vendor Store Registration Application Modal -->
+  <div class="modal-overlay" id="modal-vendor-reg">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeModal('modal-vendor-reg')"><i class="fa-solid fa-xmark"></i></button>
+      <h2><i class="fa-solid fa-store text-primary"></i> Register as SME Vendor Store</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Join thousands of enterprise sellers expanding their online business hub.</p>
+
+      <form id="vendor-reg-form" onsubmit="handleVendorRegistration(event)">
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Store Brand Name</label>
+          <input type="text" id="v-reg-name" required placeholder="e.g. Jaipur Royal Crafts" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Business Category</label>
+            <select id="v-reg-cat" class="sort-select" style="width: 100%;">
+              <option value="Handicrafts">Handicrafts & Decor</option>
+              <option value="Fashion">Fashion & Textiles</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Spices & Organics">Spices & Organics</option>
+              <option value="Home & Kitchen">Home & Kitchen</option>
+              <option value="Beauty & Herbal Wellness">Beauty & Herbal Wellness</option>
+              <option value="Footwear & Leather Goods">Footwear & Leather Goods</option>
+              <option value="Books & Stationery">Books & Stationery</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">GSTIN Number</label>
+            <input type="text" id="v-reg-gst" required placeholder="27AAACG1234H1Z5" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Owner Contact Email</label>
+          <input type="email" id="v-reg-email" required placeholder="owner@store.com" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;">Submit Vendor Verification Request <i class="fa-solid fa-paper-plane"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 8. Add/Edit Product Modal for Vendors -->
+  <div class="modal-overlay" id="modal-product-crud">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeModal('modal-product-crud')"><i class="fa-solid fa-xmark"></i></button>
+      <h2 id="crud-modal-title"><i class="fa-solid fa-box text-primary"></i> Add New Product Listing</h2>
+      
+      <form id="product-crud-form" onsubmit="handleSaveProduct(event)" style="margin-top: 1.25rem;">
+        <input type="hidden" id="crud-p-id">
+        
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Product Title</label>
+          <input type="text" id="crud-p-title" required placeholder="e.g. Wireless Noise Cancelling Headphones" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Category</label>
+            <select id="crud-p-cat" class="sort-select" style="width: 100%;">
+              <option value="Electronics">Electronics</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Handicrafts">Handicrafts</option>
+              <option value="Spices & Organics">Spices & Organics</option>
+              <option value="Home & Kitchen">Home & Kitchen</option>
+              <option value="Beauty & Herbal Wellness">Beauty & Herbal Wellness</option>
+              <option value="Footwear & Leather Goods">Footwear & Leather Goods</option>
+              <option value="Books & Stationery">Books & Stationery</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Price (₹)</label>
+            <input type="number" id="crud-p-price" required min="1" placeholder="2499" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+          </div>
+
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Stock Inventory</label>
+            <input type="number" id="crud-p-stock" required min="0" placeholder="50" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Product Image URL</label>
+          <input type="url" id="crud-p-image" required placeholder="https://images.unsplash.com/photo-..." style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);">
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--navy-800); display: block; margin-bottom: 0.3rem;">Product Description & Specs</label>
+          <textarea id="crud-p-desc" required rows="3" placeholder="Enter key features, material, warranty..." style="width: 100%; padding: 0.6rem; border: 1px solid var(--border-light); border-radius: var(--radius-md);"></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;">Save Product Listing <i class="fa-solid fa-check"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="background:#0f172a; color:#e2e8f0; padding:3rem 0 2rem; margin-top:4rem; border-top:1px solid rgba(255,255,255,.15);">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <div>
+          <div class="p-2 bg-white rounded d-inline-block mb-3" style="max-width: 160px; box-shadow: var(--shadow-sm);">
+            <img src="assets/images/logo.jpg" alt="Vyapar Setu Logo" class="img-fluid" style="max-height: 50px; object-fit: contain;">
+          </div>
+          <p style="font-size: 0.88rem; max-width: 340px; margin-bottom: 1rem;">Comprehensive Full-Stack Multi-Vendor E-Commerce Platform connecting independent SME sellers and buyers with trust and security.</p>
+          <p style="font-size: 0.75rem; color: #64748B;">Final Project Group 21 | G. V. Acharya Polytechnic (2025 – 2026)</p>
+        </div>
+
+        <div>
+          <h4 style="color: #FFF; font-size: 0.95rem; margin-bottom: 1rem;">Platform Roles</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+            <li><a href="#" onclick="switchRole('customer')">Customer Storefront</a></li>
+            <li><a href="#" onclick="switchRole('vendor')">SME Vendor Console</a></li>
+            <li><a href="#" onclick="switchRole('admin')">Admin Governance</a></li>
+            <li><a href="#" onclick="openVendorRegistrationModal()">Seller Onboarding</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="color: #FFF; font-size: 0.95rem; margin-bottom: 1rem;">Core Features</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+            <li><a href="#" onclick="openCompareModal()">Side-by-Side Compare</a></li>
+            <li><a href="#" onclick="openCartDrawer()">Dynamic Shopping Basket</a></li>
+            <li><a href="#" onclick="openOrderTracker()">Visual Shipment Tracker</a></li>
+            <li><a href="#" onclick="alert('Demonstrating automated PDF Billing Invoices generated on checkout!')">Automated PDF Invoices</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="color: #FFF; font-size: 0.95rem; margin-bottom: 1rem;">Project Guidance</h4>
+          <p style="font-size: 0.82rem; margin-bottom: 0.5rem;">Guide: <strong>Nilesh Sir</strong></p>
+          <p style="font-size: 0.82rem; margin-bottom: 0.5rem;">Team: Rishiraj Sharma, Rushikesh Sherkar, Vishal Yadav</p>
+          <div style="font-size: 0.75rem; background: rgba(255,255,255,0.08); padding: 0.5rem; border-radius: var(--radius-sm); color: #F59E0B; margin-top: 0.5rem;">
+            <i class="fa-solid fa-certificate"></i> Completed Internship Project Assignment
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; text-align: center; font-size: 0.8rem; color: #64748B;">
+        © 2026 Vyapar Setu Multi-Vendor Marketplace Platform. Built with HTML5, Vanilla CSS3 & Modern JavaScript.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application JS Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# SQLite database fallback files
+*.sqlite
+*.sqlite3
+*.db
+
+# Temporary & cache files
+scratch/
+.DS_Store
+Thumbs.db
+*.log
+
+# Large presentation export files (optional)
+# *.pptx
+# *.pdf
+# *.docx
